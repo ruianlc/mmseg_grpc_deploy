@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+
+message ABImage {
+    bytes data = 1;   // 图像字节
+    int32 width = 2;  // 图像宽度
+    int32 height = 3; // 图像高度
+}
+
+// 请求的参数
+message PredictRequest{
+    string model_path = 1;  // 模型所在路径
+    string config_path = 2; // 模型配置文件所在路径
+    string img_path = 3;    // 输入图像路径， 用于模型推理
+    string redun_id = 4;    // 冗余输入头，标记
+
+}
+
+// 定义返回的参数
+message PredictRespense{
+    string redun_id = 1;
+    bool is_error = 2;
+    string error_message = 3;
+    float res_g_ratio = 4;   // 青比例
+    float res_y_ratio = 5;   // 黄比例
+    ABImage image = 6;       // 分割结果图像
+}
+
+
+// 定义服务接口
+service Predictor{
+    rpc predict(PredictRequest) returns (PredictRespense){}
+}
